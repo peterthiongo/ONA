@@ -1,5 +1,5 @@
-import  requests
-from collections import Counter
+import  requests, json
+from collections import Counter,defaultdict
 from pprint import pprint as pp
 
 url = "https://raw.githubusercontent.com/onaio/ona-tech/master/data/water_points.json"
@@ -31,11 +31,24 @@ print(c)
 
 #water point not functioning
 
-f = filter(lambda x: x['water_functioning']!='yes', json_obj)
-print "community_ranking;"
-c = Counter(player['communities_villages'] for player in f)
-c = dict(c)
-pp(c)
-print(c)
+communities = [j['communities_villages'] for j in json_obj]
+
+#initialize data
+data = defaultdict(float)
+for community in communities:
+    data[community]=0
+#Count occurrances of a single community as a counter dictionary
+counters = Counter((i['communities_villages'] for i in json_obj))
+
+#Do the calculation
+for i in json_obj:
+    if i['water_functioning']== 'yes':
+        inc = (counters[i['communities_villages']]*100)/len(json_obj)
+        data[i['communities_villages']]+= float(inc)
+    elif i['water_functioning']== 'no':
+        dec = (counters[i['communities_villages']]*100)/len(json_obj)
+        data[i['communities_villages']]-=float(dec)
+
+print {k:"{0}%".format(v) for k,v in data.items()}
 
 print "}"
