@@ -49,6 +49,6 @@ for i in json_obj:
 print ast.literal_eval(json.dumps("community_ranking:"))
 
 
-print {k:"{0}%".format(v) for k,v in data.items()}
+print ast.literal_eval(json.dumps({k:"{0}%".format(v) for k,v in data.items()}))
 
 print "}"
