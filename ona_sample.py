@@ -1,4 +1,4 @@
-import  requests, json
+import  requests, json, ast
 from collections import Counter,defaultdict
 from pprint import pprint as pp
 
@@ -11,22 +11,19 @@ print "{"
 print "number_functional:"
 c = Counter(player['water_functioning'] for player in json_obj)
 c = dict(c)
-pp(c)
-print(c)
+print ast.literal_eval(json.dumps(c))
 
 #Number of water points in total
 print "number_water_points:"
 c = Counter(player['water_pay'] for player in json_obj)
 c = dict(c)
-pp(c)
-print(c)
+print ast.literal_eval(json.dumps(c))
 
 #Number of water points per community_village
 print "number_water_points_in_community:"
 c = Counter(player['communities_villages'] for player in json_obj)
 c = dict(c)
-pp(c)
-print(c)
+print ast.literal_eval(json.dumps(c))
 
 
 #water point not functioning
@@ -48,6 +45,9 @@ for i in json_obj:
     elif i['water_functioning']== 'no':
         dec = (counters[i['communities_villages']]*100)/len(json_obj)
         data[i['communities_villages']]-=float(dec)
+
+print ast.literal_eval(json.dumps("community_ranking:"))
+
 
 print {k:"{0}%".format(v) for k,v in data.items()}
 
